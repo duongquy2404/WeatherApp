@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/_50sdp"
+    android:layout_height="@dimen/_300sdp"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/tv_daily_day"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:text="T.2"
+        android:gravity="center"/>
+
+    <ImageView
+        android:id="@+id/iv_daily_icon_day"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_gravity="center"
+        android:src="@drawable/cloudy"/>
+
+    <ImageView
+        android:id="@+id/iv_daily_icon_night"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_gravity="center"
+        android:src="@drawable/cloudy"/>
+
+    <TextView
+        android:id="@+id/tv_daily_temperature_day"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_50sdp"
+        android:gravity="center"
+        android:text="27"/>
+
+    <TextView
+        android:id="@+id/tv_daily_temperature_night"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_50sdp"
+        android:gravity="center"
+        android:text="27"/>
+</LinearLayout>
