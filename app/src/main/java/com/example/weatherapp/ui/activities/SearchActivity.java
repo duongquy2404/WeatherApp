@@ -6,10 +6,12 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.weatherapp.R;
 import com.example.weatherapp.model.cityinfo.City;
@@ -19,7 +21,7 @@ import com.example.weatherapp.ui.adapters.CityAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity implements CityAdapter.OnCityClickListener {
     private ImageView iv_back;
     private SearchView searchView1;
 
@@ -76,6 +78,7 @@ public class SearchActivity extends AppCompatActivity {
 
     public void setupReclyceView(){
         cityAdapter.notifyDataSetChanged();
+        cityAdapter.setOnCityClickListener(this);
         rcv_locationLoad.setLayoutManager(new LinearLayoutManager(this));
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, LinearLayoutManager.VERTICAL);
         rcv_locationLoad.addItemDecoration(dividerItemDecoration);
@@ -94,5 +97,18 @@ public class SearchActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onCityClick(City city) {
+        cityArrayList.add(city);
+        City city1=new City();
+        city1.setVersion(1);
+        city1.setKey("839313");
+        city1.setType("city1");
+        Intent intent = new Intent(SearchActivity.this, LocationActivity.class);
+        intent.putExtra("CITY_LIST", city1);
+        startActivity(intent);
+        Toast.makeText(this,"Hello",Toast.LENGTH_SHORT).show();
     }
 }

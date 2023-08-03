@@ -16,6 +16,10 @@ import java.util.ArrayList;
 public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.LocationViewHolder> {
     ArrayList<City> cityArrayList;
 
+    public LocationAdapter(ArrayList<City> cityArrayList) {
+        this.cityArrayList = cityArrayList;
+    }
+
     @NonNull
     @Override
     public LocationAdapter.LocationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -42,7 +46,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
         }
 
         public void bind(City city) {
-            tv_location2.setText(city.getCountry().getLocalizedName());
+            tv_location2.setText(city.getKey());
         }
     }
 }

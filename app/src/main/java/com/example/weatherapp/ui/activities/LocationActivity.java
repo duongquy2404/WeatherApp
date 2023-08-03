@@ -13,6 +13,7 @@ import android.widget.ImageView;
 
 import com.example.weatherapp.R;
 import com.example.weatherapp.model.cityinfo.City;
+import com.example.weatherapp.ui.adapters.CityAdapter;
 import com.example.weatherapp.ui.adapters.LocationAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -40,8 +41,13 @@ public class LocationActivity extends AppCompatActivity {
         iv_menu=(ImageView) findViewById(R.id.iv_menu);
         rcv_location=(RecyclerView) findViewById(R.id.rcv_location);
         fab=(FloatingActionButton) findViewById(R.id.fab);
+        cityArrayList=new ArrayList<>();
 
-        locationAdapter=new LocationAdapter();
+        City city1 = (City) getIntent().getSerializableExtra("CITY_LIST");
+        if(city1!=null){
+            cityArrayList.add(city1);
+        }
+        locationAdapter=new LocationAdapter(cityArrayList);
     }
 
     public void clickEvent(){

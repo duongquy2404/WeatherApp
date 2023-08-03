@@ -15,10 +15,19 @@ import java.util.List;
 
 public class CityAdapter extends RecyclerView.Adapter<CityAdapter.CityViewHolder>{
     private List<City> cities;
+    public OnCityClickListener onCityClickListener;
 
     public void setData(List<City> cities) {
         this.cities = cities;
         notifyDataSetChanged();
+    }
+
+    public interface OnCityClickListener {
+        void onCityClick(City city);
+    }
+
+    public void setOnCityClickListener(OnCityClickListener listener) {
+        this.onCityClickListener = listener;
     }
 
     @NonNull
@@ -39,12 +48,24 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.CityViewHolder
         return cities != null ? cities.size() : 0;
     }
 
-    public static class CityViewHolder extends RecyclerView.ViewHolder {
+    public class CityViewHolder extends RecyclerView.ViewHolder {
         private TextView cityNameTextView;
 
         public CityViewHolder(@NonNull View itemView) {
             super(itemView);
             cityNameTextView = itemView.findViewById(R.id.cityNameTextView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (onCityClickListener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            City clickedCity = cities.get(position);
+                            onCityClickListener.onCityClick(clickedCity);
+                        }
+                    }
+                }
+            });
         }
 
         public void bind(City city) {

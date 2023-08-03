@@ -9,7 +9,7 @@ import java.util.List;
 import javax.annotation.Generated;
 
 @Generated("jsonschema2pojo")
-public class City  implements Serializable{
+public class City implements Serializable{
 //    @SerializedName("Version")
 //    @Expose
 //    private Integer version;
