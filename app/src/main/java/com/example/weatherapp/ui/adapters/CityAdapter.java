@@ -15,7 +15,7 @@ import java.util.List;
 
 public class CityAdapter extends RecyclerView.Adapter<CityAdapter.CityViewHolder>{
     private List<City> cities;
-    public OnCityClickListener onCityClickListener;
+    public static OnCityClickListener onCityClickListener;
 
     public void setData(List<City> cities) {
         this.cities = cities;

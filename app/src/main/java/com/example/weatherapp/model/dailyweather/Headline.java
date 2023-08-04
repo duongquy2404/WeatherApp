@@ -3,10 +3,12 @@ package com.example.weatherapp.model.dailyweather;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 import javax.annotation.Generated;
 
 @Generated("jsonschema2pojo")
-public class Headline {
+public class Headline implements Serializable {
 
     @SerializedName("EffectiveDate")
     @Expose

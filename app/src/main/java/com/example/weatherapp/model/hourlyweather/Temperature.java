@@ -3,10 +3,12 @@ package com.example.weatherapp.model.hourlyweather;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 import javax.annotation.Generated;
 
 @Generated("jsonschema2pojo")
-public class Temperature {
+public class Temperature implements Serializable {
 
     @SerializedName("Value")
     @Expose

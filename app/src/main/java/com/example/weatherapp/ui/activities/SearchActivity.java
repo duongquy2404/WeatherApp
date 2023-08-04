@@ -101,14 +101,19 @@ public class SearchActivity extends AppCompatActivity implements CityAdapter.OnC
 
     @Override
     public void onCityClick(City city) {
-        cityArrayList.add(city);
-        City city1=new City();
-        city1.setVersion(1);
-        city1.setKey("839313");
-        city1.setType("city1");
-        Intent intent = new Intent(SearchActivity.this, LocationActivity.class);
-        intent.putExtra("CITY_LIST", city1);
-        startActivity(intent);
-        Toast.makeText(this,"Hello",Toast.LENGTH_SHORT).show();
+//        Intent intent = new Intent(SearchActivity.this, LocationActivity.class);
+//        intent.putExtra("CITY_LIST", city);
+//        startActivity(intent);
+        // Tạo Intent để truyền object về MainActivity
+        Intent intent = new Intent();
+        intent.putExtra("SELECTED_OBJECT", city);
+        setResult(RESULT_OK, intent);
+        finish(); // Đóng SearchActivity và trở về MainActivity
+        // Tạo Intent để truyền object về MainActivity
+//        Intent intent = new Intent(SearchActivity.this, LocationActivity.class);
+//        intent.putExtra("SELECTED_OBJECT", city);
+//        //setResult(RESULT_OK,intent);
+//        startActivityForResult(intent, 1); // 1 là requestCode
+        Toast.makeText(this,city.getLocalizedName(),Toast.LENGTH_SHORT).show();
     }
 }
