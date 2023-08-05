@@ -16,7 +16,7 @@ public class WeatherFragment extends Fragment {
     private static final String ARG_LOCATION = "arg_location";
 
     public WeatherFragment() {
-        // Required empty public constructor
+
     }
 
     public static WeatherFragment newInstance(City city) {

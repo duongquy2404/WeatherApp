@@ -1,24 +1,36 @@
 package com.example.weatherapp.ui.activities;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
 import com.example.weatherapp.R;
+import com.example.weatherapp.database.LocationDatabase;
+import com.example.weatherapp.entity.Location;
 import com.example.weatherapp.model.cityinfo.City;
+import com.example.weatherapp.model.currentweather.Current;
+import com.example.weatherapp.repositories.WeatherRepository;
 import com.example.weatherapp.ui.adapters.CityAdapter;
 import com.example.weatherapp.ui.adapters.LocationAdapter;
+import com.example.weatherapp.utils.DataLocalManager;
+import com.example.weatherapp.utils.SharedPreferencesHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class LocationActivity extends AppCompatActivity {
     private ImageView iv_back, iv_menu;
@@ -27,15 +39,16 @@ public class LocationActivity extends AppCompatActivity {
 
     private ArrayList<City> cityArrayList;
     private LocationAdapter locationAdapter;
+    private WeatherRepository weatherRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
         init();
+        setCityArrayList();
         clickEvent();
         setupRecycleView();
-        //addLocation();
     }
 
     public void init(){
@@ -45,6 +58,7 @@ public class LocationActivity extends AppCompatActivity {
         fab=(FloatingActionButton) findViewById(R.id.fab);
         cityArrayList=new ArrayList<>();
         locationAdapter=new LocationAdapter(cityArrayList);
+        weatherRepository=new WeatherRepository();
     }
 
     public void clickEvent(){
@@ -65,8 +79,6 @@ public class LocationActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent=new Intent(LocationActivity.this, SearchActivity.class);
-//                startActivity(intent);
                 onSearchButtonClick(view);
             }
         });
@@ -79,43 +91,45 @@ public class LocationActivity extends AppCompatActivity {
         rcv_location.setAdapter(locationAdapter);
     }
 
-    public void addLocation(){
-        Intent intent= getIntent();
-        if(intent.hasExtra("CITY_LIST")){
-            City city=(City) intent.getSerializableExtra("CITY_LIST");
-            cityArrayList.add(city);
-            locationAdapter.notifyDataSetChanged();
-
-        }
-    }
-
     public void onSearchButtonClick(View view) {
         Intent intent = new Intent(LocationActivity.this, SearchActivity.class);
-        startActivityForResult(intent, 1); // 1 là requestCode
+        startActivityForResult(intent, 1);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        // Kiểm tra requestCode và resultCode
         if (requestCode == 1 && resultCode == RESULT_OK) {
-            // Nhận dữ liệu từ Intent (nếu có)
             if (data != null) {
-                // Lấy object được trả về từ SearchActivity (nếu bạn truyền object qua Intent)
                 City city = (City) data.getSerializableExtra("SELECTED_OBJECT");
-
-                // Thêm object vào ArrayList hoặc xử lý dữ liệu tương ứng
                 if (city != null) {
-                    // Thêm selectedObject vào ArrayList (nếu bạn muốn)
                     cityArrayList.add(city);
+                    Location location=new Location(city.getKey());
+                    LocationDatabase.getInstance(this).locationDao().insertLocation(location);
+                    locationAdapter.notifyDataSetChanged();
+                }
+            }
+        }
+    }
 
-                    // Gọi notifyDataSetChanged() để cập nhật RecyclerView hoặc ListView
+    public void setCityArrayList(){
+        List<Location> locationArrayList=new ArrayList<>();
+        locationArrayList=LocationDatabase.getInstance(this).locationDao().getListLocation();
+        for(int i=0;i<locationArrayList.size();i++){
+            Location location=locationArrayList.get(i);
+            String key=location.getKey();
+            weatherRepository.getCityByKey(key, "vi", new WeatherRepository.CityCallBack() {
+                @Override
+                public void onSuccess(City city) {
+                    cityArrayList.add(city);
                     locationAdapter.notifyDataSetChanged();
                 }
 
-                // Xử lý dữ liệu tương ứng (nếu cần)
-                // ...
-            }
+                @Override
+                public void onFailure(Throwable throwable) {
+
+                }
+            });
         }
     }
 }

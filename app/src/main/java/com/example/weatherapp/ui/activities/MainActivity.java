@@ -20,6 +20,7 @@ import com.example.weatherapp.model.currentweather.Temperature;
 import com.example.weatherapp.repositories.WeatherRepository;
 import com.example.weatherapp.ui.adapters.CityAdapter;
 import com.example.weatherapp.ui.adapters.WeatherAdapter;
+import com.example.weatherapp.utils.DataLocalManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,12 +28,11 @@ import java.util.List;
 import me.relex.circleindicator.CircleIndicator3;
 
 public class MainActivity extends AppCompatActivity {
-    private TextView tv_location1;
+    private TextView tv_location1, tv_location_main;
     private SearchView searchView;
     private ImageButton ib_menu;
     private CircleIndicator3 indicator;
     private ViewPager2 vp_weather;
-    private TextView tv_location_main;
     private ArrayList<City> cityArrayList;
     private WeatherAdapter weatherAdapter;
     private WeatherRepository weatherRepository;
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         cityArrayList=new ArrayList<City>();
         City city=new City();
         city.setVersion(1);
-        city.setKey("839313");
+        city.setKey("353412");
         city.setType("city1");
         City city2=new City();
         city2.setVersion(2);
@@ -55,8 +55,6 @@ public class MainActivity extends AppCompatActivity {
         city2.setType("city2");
         cityArrayList.add(city);
         cityArrayList.add(city2);
-        searchCities("hanoi");
-        showCurrentWeather();
         setupViewPager();
         indicator.setViewPager(vp_weather);
     }
@@ -83,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                //WeatherRepository.fetchDataForLocation(query);
                 return false;
             }
 
@@ -100,39 +97,10 @@ public class MainActivity extends AppCompatActivity {
         vp_weather.setAdapter(weatherAdapter);
     }
 
-    public void showCurrentWeather(){
-        String locationKey = "353412";
-        weatherRepository.getCurrentWeather(locationKey, new WeatherRepository.WeatherCallback() {
+    public void getCurrentWeather(City city){
+        weatherRepository.getCurrentWeather(city.getKey(), "vi", new WeatherRepository.WeatherCallback() {
             @Override
             public void onSuccess(Current currentWeather) {
-                if (currentWeather != null) {
-                    String weatherText = currentWeather.getWeatherText();
-                    Temperature temperature = currentWeather.getTemperature();
-                    //String temperatureUnit = currentWeather.getTemperatureUnit();
-
-                    // Example: Display the weather information in a TextView
-                    //TextView weatherInfoTextView = findViewById(R.id.weatherInfoTextView);
-                    //weatherInfoTextView.setText("Weather: " + weatherText + "\nTemperature: " + temperature + " " + temperatureUnit);
-                } else {
-                    // Data is empty or invalid
-                    Toast.makeText(MainActivity.this, "No weather data available", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable throwable) {
-
-            }
-        });
-    }
-
-    public void searchCities(String query) {
-        weatherRepository.getCities(query, new WeatherRepository.CitySearchCallback1() {
-            @Override
-            public void onSuccess(List<City> cities) {
-                City city=cities.get(0);
-                cityArrayList.add(city);
-                weatherAdapter.notifyDataSetChanged();
             }
 
             @Override

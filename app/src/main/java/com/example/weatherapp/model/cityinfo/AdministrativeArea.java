@@ -9,7 +9,6 @@ import java.io.Serializable;
 
 @Generated("jsonschema2pojo")
 public class AdministrativeArea implements Serializable {
-
     @SerializedName("ID")
     @Expose
     private String id;

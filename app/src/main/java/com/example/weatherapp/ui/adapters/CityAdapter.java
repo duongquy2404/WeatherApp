@@ -70,7 +70,6 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.CityViewHolder
 
         public void bind(City city) {
             cityNameTextView.setText(city.getLocalizedName());
-            // Bind other relevant city information if needed
         }
     }
 }

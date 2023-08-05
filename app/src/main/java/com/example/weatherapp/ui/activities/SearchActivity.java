@@ -18,6 +18,7 @@ import com.example.weatherapp.model.cityinfo.City;
 import com.example.weatherapp.repositories.WeatherRepository;
 import com.example.weatherapp.ui.adapters.CityAdapter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -101,19 +102,10 @@ public class SearchActivity extends AppCompatActivity implements CityAdapter.OnC
 
     @Override
     public void onCityClick(City city) {
-//        Intent intent = new Intent(SearchActivity.this, LocationActivity.class);
-//        intent.putExtra("CITY_LIST", city);
-//        startActivity(intent);
         // Tạo Intent để truyền object về MainActivity
         Intent intent = new Intent();
         intent.putExtra("SELECTED_OBJECT", city);
         setResult(RESULT_OK, intent);
-        finish(); // Đóng SearchActivity và trở về MainActivity
-        // Tạo Intent để truyền object về MainActivity
-//        Intent intent = new Intent(SearchActivity.this, LocationActivity.class);
-//        intent.putExtra("SELECTED_OBJECT", city);
-//        //setResult(RESULT_OK,intent);
-//        startActivityForResult(intent, 1); // 1 là requestCode
-        Toast.makeText(this,city.getLocalizedName(),Toast.LENGTH_SHORT).show();
+        finish(); // Đóng SearchActivity và trở về LocationActivity
     }
 }

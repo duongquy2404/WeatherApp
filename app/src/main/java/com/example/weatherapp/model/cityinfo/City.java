@@ -1,5 +1,12 @@
 package com.example.weatherapp.model.cityinfo;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -9,7 +16,7 @@ import java.util.List;
 import javax.annotation.Generated;
 
 @Generated("jsonschema2pojo")
-public class City implements Serializable{
+public class City implements Serializable {
     @SerializedName("Version")
     @Expose
     private Integer version;
