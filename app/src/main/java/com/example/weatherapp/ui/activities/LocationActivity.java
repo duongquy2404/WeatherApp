@@ -11,9 +11,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 
 import com.example.weatherapp.R;
 import com.example.weatherapp.database.LocationDatabase;
@@ -73,6 +76,7 @@ public class LocationActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Hiển thị menu
+                showMenu(view);
             }
         });
 
@@ -96,6 +100,7 @@ public class LocationActivity extends AppCompatActivity {
         startActivityForResult(intent, 1);
     }
 
+    // Thêm location vào cityArraylist và lưu locationKey vào RoomDB
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -112,6 +117,7 @@ public class LocationActivity extends AppCompatActivity {
         }
     }
 
+    // Lấy ra thông tin vị trí, thời điểm, thời tiết dựa vào locationKey đc lưu trong RoomDB
     public void setCityArrayList(){
         List<Location> locationArrayList=new ArrayList<>();
         locationArrayList=LocationDatabase.getInstance(this).locationDao().getListLocation();
@@ -131,5 +137,17 @@ public class LocationActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    public void showMenu(View view){
+        PopupMenu popupMenu=new PopupMenu(view.getContext(), view);
+        popupMenu.getMenuInflater().inflate(R.menu.menu_item,popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                return false;
+            }
+        });
+        popupMenu.show();
     }
 }

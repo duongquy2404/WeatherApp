@@ -14,6 +14,7 @@ import com.example.weatherapp.R;
 import com.example.weatherapp.model.cityinfo.City;
 import com.example.weatherapp.model.currentweather.Current;
 import com.example.weatherapp.model.dailyweather.DailyWeather;
+import com.example.weatherapp.model.hourlyweather.HourlyWeather;
 import com.example.weatherapp.repositories.WeatherRepository;
 import com.example.weatherapp.utils.DataConverter;
 
@@ -67,7 +68,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
             weatherRepository.getCurrentWeather(city.getKey(), "vi", new WeatherRepository.WeatherCallback() {
                 @Override
                 public void onSuccess(Current currentWeather) {
-                    tv_datetime.setText(currentWeather.getLocalObservationDateTime());
+                    tv_datetime.setText(DataConverter.convert(currentWeather.getLocalObservationDateTime()));
                     tv_temp.setText(Math.round(currentWeather.getTemperature().getMetric().getValue())+"°");
                 }
 

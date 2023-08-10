@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="@dimen/_50sdp"
     android:layout_height="@dimen/_200sdp"
+    android:background="@drawable/border_item"
     android:orientation="vertical">
     <TextView
         android:id="@+id/tv_hourly_time"

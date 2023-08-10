@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.weatherapp.R;
+import com.example.weatherapp.database.LocationDatabase;
+import com.example.weatherapp.entity.Location;
 import com.example.weatherapp.model.cityinfo.City;
 import com.example.weatherapp.model.currentweather.Current;
 import com.example.weatherapp.model.currentweather.Temperature;
@@ -44,19 +47,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         init();
         clickEvent();
-        cityArrayList=new ArrayList<City>();
-        City city=new City();
-        city.setVersion(1);
-        city.setKey("353412");
-        city.setType("city1");
-        City city2=new City();
-        city2.setVersion(2);
-        city2.setKey("53758");
-        city2.setType("city2");
-        cityArrayList.add(city);
-        cityArrayList.add(city2);
         setupViewPager();
         indicator.setViewPager(vp_weather);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        setCityArrayList();
+        setupViewPager();
     }
 
     public void init(){
@@ -65,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         ib_menu=(ImageButton) findViewById(R.id.ib_menu);
         indicator=(CircleIndicator3) findViewById(R.id.indicator);
         vp_weather=(ViewPager2) findViewById(R.id.vp_weather);
-
+        cityArrayList=new ArrayList<>();
         tv_location_main=(TextView) findViewById(R.id.tv_location_main);
         weatherRepository=new WeatherRepository();
     }
@@ -97,16 +96,26 @@ public class MainActivity extends AppCompatActivity {
         vp_weather.setAdapter(weatherAdapter);
     }
 
-    public void getCurrentWeather(City city){
-        weatherRepository.getCurrentWeather(city.getKey(), "vi", new WeatherRepository.WeatherCallback() {
-            @Override
-            public void onSuccess(Current currentWeather) {
-            }
+    public void setCityArrayList(){
+        List<Location> locationArrayList=new ArrayList<>();
+        locationArrayList= LocationDatabase.getInstance(this).locationDao().getListLocation();
+        cityArrayList.clear();
+        for(int i=0;i<locationArrayList.size();i++){
+            Location location=locationArrayList.get(i);
+            String key=location.getKey();
+            weatherRepository.getCityByKey(key, "vi", new WeatherRepository.CityCallBack() {
+                @SuppressLint("NotifyDataSetChanged")
+                @Override
+                public void onSuccess(City city) {
+                    cityArrayList.add(city);
+                    weatherAdapter.notifyDataSetChanged();
+                }
 
-            @Override
-            public void onFailure(Throwable throwable) {
+                @Override
+                public void onFailure(Throwable throwable) {
 
-            }
-        });
+                }
+            });
+        }
     }
 }

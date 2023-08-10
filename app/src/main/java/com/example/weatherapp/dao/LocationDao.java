@@ -1,6 +1,7 @@
 package com.example.weatherapp.dao;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
@@ -17,4 +18,7 @@ public interface LocationDao {
 
     @Query("SELECT * FROM location")
     List<Location> getListLocation();
+
+    @Query("DELETE FROM location WHERE `key` = :itemKey")
+    void deleteById(String itemKey);
 }
