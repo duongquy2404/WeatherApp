@@ -19,8 +19,11 @@ import android.widget.TextView;
 import com.example.weatherapp.R;
 import com.example.weatherapp.model.cityinfo.City;
 import com.example.weatherapp.model.currentweather.Current;
+import com.example.weatherapp.model.dailyweather.DailyForecast;
+import com.example.weatherapp.model.dailyweather.DailyWeather;
 import com.example.weatherapp.model.hourlyweather.HourlyWeather;
 import com.example.weatherapp.repositories.WeatherRepository;
+import com.example.weatherapp.ui.adapters.DailyAdapter;
 import com.example.weatherapp.ui.adapters.HourlyAdapter;
 import com.example.weatherapp.utils.DataConverter;
 
@@ -31,6 +34,8 @@ public class WeatherFragment extends Fragment {
 
     private WeatherRepository weatherRepository=new WeatherRepository();
     private ArrayList<HourlyWeather> hourlyWeatherList = new ArrayList<>();
+    private DailyWeather dailyWeather=new DailyWeather();
+    private ArrayList<DailyForecast> dailyForecastArrayList=new ArrayList<>();
 
     public WeatherFragment() {
 
@@ -66,6 +71,7 @@ public class WeatherFragment extends Fragment {
         ImageView iv_iconweather=rootView.findViewById(R.id.iv_iconweather);
         tv_location_main.setText(city.getLocalizedName());
 
+        // Thiết lập RecycleView cho hourly
         RecyclerView rcv_hourly = rootView.findViewById(R.id.rcv_hourly);
         if (savedInstanceState != null) {
             hourlyWeatherList = (ArrayList<HourlyWeather>) savedInstanceState.getSerializable("hourlyWeatherList");
@@ -75,6 +81,18 @@ public class WeatherFragment extends Fragment {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), LinearLayoutManager.HORIZONTAL);
         rcv_hourly.addItemDecoration(dividerItemDecoration);
         rcv_hourly.setAdapter(hourlyAdapter);
+
+        // Thiết lập RecycleView cho daily
+        RecyclerView rcv_daily= rootView.findViewById(R.id.rcv_daily);
+        if(savedInstanceState != null){
+            dailyForecastArrayList= (ArrayList<DailyForecast>) savedInstanceState.getSerializable("dailyForecastList");
+        }
+        DailyAdapter dailyAdapter=new DailyAdapter(dailyForecastArrayList);
+        rcv_daily.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL,false));
+        DividerItemDecoration dividerItemDecoration1=new DividerItemDecoration(getActivity(),LinearLayoutManager.HORIZONTAL);
+        rcv_daily.addItemDecoration(dividerItemDecoration1);
+        rcv_daily.setAdapter(dailyAdapter);
+
 
         // Call api thời tiết hiện tại
         weatherRepository.getCurrentWeather(city.getKey(), "vi", new WeatherRepository.WeatherCallback() {
@@ -108,6 +126,20 @@ public class WeatherFragment extends Fragment {
 
             }
         });
+
+        weatherRepository.getDailyWeather(city.getKey(), new WeatherRepository.DailyCallback() {
+            @Override
+            public void onSuccess(DailyWeather dailyWeather) {
+                dailyForecastArrayList.clear();
+                dailyForecastArrayList.addAll(dailyWeather.getDailyForecasts());
+                dailyAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+
+            }
+        });
         return rootView;
     }
 
@@ -115,5 +147,6 @@ public class WeatherFragment extends Fragment {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable("hourlyWeatherList", hourlyWeatherList);
+        outState.putSerializable("dailyForecastList", dailyForecastArrayList);
     }
 }

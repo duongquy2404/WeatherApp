@@ -55,6 +55,11 @@ public class DataConverter {
         return result;
     }
 
+    public static String convertDate(String inputDate){
+        OffsetDateTime offsetDateTime = OffsetDateTime.parse(inputDate);
+        return getDayOfWeekText(offsetDateTime.getDayOfWeek().getValue());
+    }
+
     private static String getDayOfWeekText(int dayOfWeek) {
         String[] daysOfWeek = {"", "T.2", "T.3", "T.4", "T.5", "T.6", "T.7", "CN"};
         return daysOfWeek[dayOfWeek];

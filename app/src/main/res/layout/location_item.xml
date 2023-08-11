@@ -4,6 +4,7 @@
     android:layout_height="@dimen/_80sdp"
     android:orientation="horizontal">
     <LinearLayout
+        android:id="@+id/vt1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_15sdp"
@@ -35,7 +36,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_50sdp"
+        android:layout_marginStart="@dimen/_60sdp"
         android:layout_marginTop="@dimen/_15sdp"
         android:orientation="vertical">
         <LinearLayout
